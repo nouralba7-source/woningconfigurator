@@ -207,6 +207,9 @@ textarea.form-input{resize:vertical;min-height:64px;font-family:inherit;line-hei
 // (Email > EmailJS > Account > General)
 const EMAILJS_SERVICE_ID  = 'service_dkxq3n8';
 const EMAILJS_TEMPLATE_ID = 'template_5dc1wjw';
+// Apart template voor de interne notificatiemail naar het team (nouralba6@gmail.com)
+// Maak dit template aan in EmailJS en vul de Template ID hieronder in
+const EMAILJS_NOTIFY_TEMPLATE_ID = 'template_c26zt15';
 const EMAILJS_PUBLIC_KEY  = 'J89IsSfSQ15loIoYy';
 emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
@@ -626,6 +629,16 @@ async function sendAanvraag(){
       kamerlijst: kamerlijst,
       vraag: vraag,
     });
+    // Interne notificatiemail naar het team (faalt stil als template nog niet bestaat)
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_NOTIFY_TEMPLATE_ID, {
+      email: email,
+      doelgroep: g.lbl,
+      modules: mods,
+      m2: totalM2(),
+      huur: w.toLocaleString('nl-NL'),
+      kamerlijst: kamerlijst,
+      vraag: vraag,
+    }).catch(()=>{});
     decAvail(gi,mods);
     document.getElementById('aanvraag-card').innerHTML=`
       <div class="success-msg">
